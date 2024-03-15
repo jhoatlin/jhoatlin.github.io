@@ -60,10 +60,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "max-pf-correction:build:production"
+              "buildTarget": "max-pf-correction:build:production"
             },
             "development": {
-              "browserTarget": "max-pf-correction:build:development"
+              "buildTarget": "max-pf-correction:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -71,7 +71,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "max-pf-correction:build"
+            "buildTarget": "max-pf-correction:build"
           }
         },
         "test": {

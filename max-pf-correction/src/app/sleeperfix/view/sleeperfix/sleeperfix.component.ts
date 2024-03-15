@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { CorrectedMaxPotentialPoints, OptimalLineup, Player, SleeperCorrectedData, SleeperLeague, SleeperTeam, SleeperUsers } from '../../models/sleeperfix.model';
+import { CorrectedMaxPotentialPoints, OptimalLineup, Player, SleeperCorrectedData, SleeperLeague, SleeperTeam, SleeperUsers, TeamDropdown } from '../../models/sleeperfix.model';
 import { SleeperfixService } from '../../service/sleeperfix.service';
 import { Table } from 'primeng/table';
 import * as playerData from '../../../../assets/players.json';
@@ -33,7 +33,7 @@ export class SleeperfixComponent {
   starterpositions: string[] = [];
   remainingpositions: string[] = [];
 
-  @ViewChild('dtCorrected') table: Table;
+  @ViewChild('dtCorrected') table!: Table;
 
   constructor(private sleeperfixService: SleeperfixService) { }
 
@@ -113,7 +113,9 @@ export class SleeperfixComponent {
   }
 
   async setupDropdownOptions() {
+
     for (const team in this.leagueDetails.teamnames) {
+      console.log('team name');
       console.log(team);
       this.teamdropdownoptions.push({ label: this.leagueDetails.teamnames[team], value: team });
 
@@ -121,6 +123,9 @@ export class SleeperfixComponent {
     for (const week in this.leagueDetails.weeks) {
       this.weeks.push({ label: `Week ${this.leagueDetails.weeks[week]}`, value: this.leagueDetails.weeks[week] });
     }
+
+    console.log(this.teamdropdownoptions);
+    console.log(this.weeks);
   }
 
 
@@ -214,28 +219,32 @@ export class SleeperfixComponent {
 
         const optimalLineup: OptimalLineup[] = [];
         const previousoptimalLineup: OptimalLineup[] = [];
-        for (const [playerKey, value] of Object.entries(matchup.players_points)) {
-          optimalLineup.push({
-            player_id: playerKey,
-            player_name: this.players[playerKey].full_name,
-            positions: this.players[playerKey].fantasy_positions || [],
-            points: value,
-            isInOptimalLineup: false,
-            isDifferent: false,
-            used_position: '',
-            optimal_position: ''
-          });
-          previousoptimalLineup.push({
-            player_id: playerKey,
-            player_name: this.players[playerKey].full_name,
-            positions: this.players[playerKey].fantasy_positions || [],
-            points: value,
-            isInOptimalLineup: false,
-            isDifferent: false,
-            used_position: '',
-            optimal_position: ''
-          });
+        for (const playerKey in matchup.players_points) {
+          if (Object.prototype.hasOwnProperty.call(matchup.players_points, playerKey)) {
+            const value = matchup.players_points[playerKey];
+            optimalLineup.push({
+              player_id: playerKey,
+              player_name: this.players[playerKey as any].full_name,
+              positions: this.players[playerKey as any].fantasy_positions || [],
+              points: value,
+              isInOptimalLineup: false,
+              isDifferent: false,
+              used_position: '',
+              optimal_position: ''
+            });
+            previousoptimalLineup.push({
+              player_id: playerKey,
+              player_name: this.players[playerKey as any].full_name,
+              positions: this.players[playerKey as any].fantasy_positions || [],
+              points: value,
+              isInOptimalLineup: false,
+              isDifferent: false,
+              used_position: '',
+              optimal_position: ''
+            });
+          }
         }
+
 
         // Check for any players that have multiple positions
         if (i === 10 && matchup.roster_id === 12) {

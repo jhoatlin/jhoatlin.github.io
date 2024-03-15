@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
 import { SleeperCorrectedData, SleeperLeague, SleeperMatchup, SleeperTeam, SleeperUsers } from '../models/sleeperfix.model';
 
 @Injectable({
@@ -10,14 +9,6 @@ export class SleeperfixService {
 
   constructor(private http: HttpClient) { }
 
-  getCorrectedData(leagueid: string){
-    var leagueDetails = this.http.get<any>(`${environment.api_base_url}/SleeperInterface/GetCorrectedMaxPoints/${leagueid}`)
-    .toPromise()
-    .then(res => res as SleeperLeague)
-    .then(data => data);
-
-    return leagueDetails;
-  }
 
   getLeagueInfo(leagueid: string){
     var leagueDetails = this.http.get<any>(`https://api.sleeper.app/v1/league/${leagueid}`)

@@ -96,3 +96,8 @@ export interface SleeperMatchup {
   players_points: { [playerId: string]: number };
 }
 
+export interface TeamDropdown {
+  name: string;
+  id: string;
+}
+
